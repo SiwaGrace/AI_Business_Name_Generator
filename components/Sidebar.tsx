@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Zap, Star, Clock, Layers } from "lucide-react";
+import { X, Zap, Star, Clock } from "lucide-react";
 import Link from "next/link";
 
 interface SidebarProps {
@@ -9,10 +9,9 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { icon: Zap, label: "Generator", href: "#", active: true },
-  { icon: Star, label: "Starred Names", href: "#", active: false },
-  { icon: Clock, label: "Recent History", href: "#", active: false },
-  { icon: Layers, label: "Brand Kits", href: "#", active: false },
+  { icon: Zap, label: "Generator", href: "/", active: true },
+  { icon: Star, label: "Starred Names", href: "/starred", active: false },
+  { icon: Clock, label: "Recent History", href: "/history", active: false },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -20,16 +19,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex flex-col fixed top-0 left-0 h-full w-52 bg-nomina-panel border-r border-white/5 z-40 px-3 py-6">
-        <SidebarContent onClose={onClose} />
+        <SidebarContent onClose={onClose} isOpen={isOpen} />
       </aside>
 
-      {/* Mobile Sidebar */}
+      {/* Mobile Sidebar bg-nomina-panel*/}
       <aside
-        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-nomina-panel border-r border-white/5 z-40 px-3 py-6 transform transition-transform duration-300 ease-in-out ${
+        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-black border-r border-white/5 z-40 px-3 py-6 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end">
           <button
             onClick={onClose}
             className="p-2 rounded-lg hover:bg-white/10 text-nomina-muted hover:text-white transition-colors"
@@ -43,7 +42,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   );
 }
 
-function SidebarContent({ onClose }: { onClose: () => void }) {
+function SidebarContent({
+  onClose,
+  isOpen,
+}: {
+  onClose: () => void;
+  isOpen?: boolean;
+}) {
   return (
     <div className="flex flex-col h-full">
       {/* Logo */}
@@ -73,11 +78,11 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
       </nav>
 
       {/* Bottom */}
-      <div className="mt-auto px-3">
+      {/* <div className={`mt-auto px-3 mb-5 ${isOpen ? "mb-5" : "mb-0"}`}>
         <button className="w-full py-2.5 rounded-xl bg-linear-to-r from-nomina-accent to-violet-500 text-white text-xs font-bold hover:opacity-90 transition-opacity shadow-lg shadow-nomina-accent/20">
           Upgrade to Pro
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

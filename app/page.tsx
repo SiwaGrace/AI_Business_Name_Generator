@@ -65,9 +65,9 @@ export default function Home() {
             </div>
 
             <div className="mt-auto space-y-3">
-              <button className="w-full py-3 rounded-xl bg-linear-to-r from-nomina-accent to-violet-500 text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-nomina-accent/20">
+              {/* <button className="w-full py-3 rounded-xl bg-linear-to-r from-nomina-accent to-violet-500 text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-nomina-accent/20">
                 Upgrade to Pro
-              </button>
+              </button> */}
               <button className="w-full text-xs text-nomina-muted flex items-center justify-center gap-1.5 hover:text-white transition-colors">
                 <span className="w-1.5 h-1.5 rounded-full bg-nomina-accent inline-block" />
                 Help Center

@@ -58,7 +58,7 @@ export default function GeneratorPanel() {
           </p>
         </div>
 
-        <div className="space-y-5">
+        <form className="space-y-5">
           {/* Business Description */}
           <div>
             <label className="block text-[11px] font-semibold tracking-widest text-nomina-muted uppercase mb-2">
@@ -172,7 +172,7 @@ export default function GeneratorPanel() {
               </>
             )}
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

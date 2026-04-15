@@ -21,13 +21,24 @@ export default function Header({ onMenuToggle }: HeaderProps) {
         >
           <Menu size={20} />
         </button>
-        <span className="lg:hidden text-base font-black tracking-tight text-white">
-          Nomina<span className="text-nomina-accent">AI</span>
-        </span>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-linear-to-br from-primary to-primary-container rounded-lg flex items-center justify-center text-white">
+            <span
+              className="material-symbols-outlined text-lg"
+              data-weight="fill"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              auto_awesome
+            </span>
+          </div>
+          <span className="text-2xl font-bold text-[#36274e] dark:text-[#fcf4ff] font-['Plus_Jakarta_Sans'] tracking-tight">
+            Nomina AI
+          </span>
+        </div>
       </div>
 
       {/* Center Nav */}
-      <nav className="hidden md:flex items-center gap-6">
+      {/* <nav className="hidden md:flex items-center gap-6">
         {navLinks.map((link) => (
           <Link
             key={link}
@@ -41,10 +52,10 @@ export default function Header({ onMenuToggle }: HeaderProps) {
             {link}
           </Link>
         ))}
-      </nav>
+      </nav> */}
 
       {/* Right */}
-      <div className="flex items-center gap-2">
+      {/* <div className="flex items-center gap-2">
         <button className="p-2 rounded-lg hover:bg-white/10 text-nomina-muted hover:text-white transition-colors hidden sm:flex">
           <Moon size={16} />
         </button>
@@ -54,7 +65,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
         <div className="w-8 h-8 rounded-full bg-linear-to-br from-nomina-accent to-violet-600 flex items-center justify-center text-xs font-bold text-white">
           JD
         </div>
-      </div>
+      </div> */}
     </header>
   );
 }
