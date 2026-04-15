@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { handleGenerate } from "@/actions/generateNameAction";
 import { Zap, ChevronDown } from "lucide-react";
+import { useState, type FormEvent } from "react";
 
 const industries = [
   "Fintech & Web3",
@@ -23,23 +24,34 @@ const tones = [
 ];
 
 export default function GeneratorPanel() {
+  const [result, setResult] = useState("");
+  const [isPending, setIsPending] = useState(false);
   const [description, setDescription] = useState("");
   const [industry, setIndustry] = useState("Fintech & Web3");
   const [suggestions, setSuggestions] = useState(12);
   const [selectedTones, setSelectedTones] = useState<string[]>(["Minimalist"]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const toggleTone = (tone: string) => {
     setSelectedTones((prev) =>
       prev.includes(tone) ? prev.filter((t) => t !== tone) : [...prev, tone],
     );
   };
-
-  const handleGenerate = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsPending(true);
+    try {
+      const formData = new FormData(event.currentTarget);
+      const response = await handleGenerate(null, formData);
+      setResult(response);
+    } catch (error) {
+      console.error(error);
+      setResult("An error occurred while generating the name. Please try again.");
+    } finally {
+      setIsPending(false);
+    }
   };
+
 
   return (
     <div className="relative max-w-2xl mx-auto">
@@ -58,7 +70,7 @@ export default function GeneratorPanel() {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Business Description */}
           <div>
             <label className="block text-[11px] font-semibold tracking-widest text-nomina-muted uppercase mb-2">
@@ -66,9 +78,11 @@ export default function GeneratorPanel() {
             </label>
             <textarea
               rows={4}
+              name="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe your brand's soul, mission, and unique frequency..."
+              required
               className="w-full bg-nomina-input border border-white/8 rounded-xl px-4 py-3 text-sm text-white placeholder:text-nomina-muted/50 resize-none focus:outline-none focus:border-nomina-accent/50 focus:ring-1 focus:ring-nomina-accent/30 transition-all"
             />
           </div>
@@ -82,6 +96,7 @@ export default function GeneratorPanel() {
               </label>
               <div className="relative">
                 <button
+                  type="button"
                   onClick={() => setDropdownOpen((v) => !v)}
                   className="w-full flex items-center justify-between bg-nomina-input border border-white/8 rounded-xl px-4 py-3 text-sm text-white hover:border-nomina-accent/40 transition-colors"
                 >
@@ -95,6 +110,7 @@ export default function GeneratorPanel() {
                   <div className="absolute top-full left-0 right-0 mt-1 bg-nomina-panel border border-white/10 rounded-xl overflow-hidden z-10 shadow-xl">
                     {industries.map((ind) => (
                       <button
+                        type="button"
                         key={ind}
                         onClick={() => {
                           setIndustry(ind);
@@ -122,6 +138,7 @@ export default function GeneratorPanel() {
               <div className="flex items-center h-11.5">
                 <input
                   type="range"
+                  name="length"
                   min={4}
                   max={24}
                   value={suggestions}
@@ -140,6 +157,7 @@ export default function GeneratorPanel() {
             <div className="flex flex-wrap gap-2">
               {tones.map((tone) => (
                 <button
+                  type="button"
                   key={tone}
                   onClick={() => toggleTone(tone)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all duration-200 ${
@@ -153,14 +171,21 @@ export default function GeneratorPanel() {
               ))}
             </div>
           </div>
+          <input type="hidden" name="industry" value={industry} />
+          <input
+            type="hidden"
+            name="tone"
+            value={selectedTones.length ? selectedTones.join(", ") : "Minimalist"}
+          />
+          <input type="hidden" name="count" value="1" />
 
           {/* CTA */}
           <button
-            onClick={handleGenerate}
-            disabled={loading}
+            type="submit"
+            disabled={isPending}
             className="w-full py-3.5 rounded-xl bg-linear-to-r from-nomina-accent to-violet-500 text-white font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-nomina-accent/25 disabled:opacity-70"
           >
-            {loading ? (
+            {isPending ? (
               <>
                 <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 Generating...
@@ -173,6 +198,14 @@ export default function GeneratorPanel() {
             )}
           </button>
         </form>
+        {result && (
+          <div className="mt-6 rounded-xl border border-white/10 bg-nomina-panel p-4">
+            <p className="text-[11px] font-semibold tracking-widest text-nomina-muted uppercase mb-2">
+              Generated Names
+            </p>
+            <p className="text-sm text-white whitespace-pre-wrap">{result}</p>
+          </div>
+        )}
       </div>
     </div>
   );

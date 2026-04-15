@@ -43,8 +43,23 @@ export async function generateName(
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return response.text();
-  } catch (error: any) {
-    if (retries > 0 && (error.status === 429 || error.status >= 500)) {
+  } catch (error: unknown) {
+    const status =
+      typeof error === "object" &&
+      error !== null &&
+      "status" in error &&
+      typeof (error as { status?: unknown }).status === "number"
+        ? (error as { status: number }).status
+        : undefined;
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : typeof error === "string"
+          ? error
+          : "Unknown error";
+
+    if (retries > 0 && (status === 429 || (typeof status === "number" && status >= 500))) {
       console.log(
         `⚠️ Request failed. Retrying in ${delay}ms... (${retries} retries left)`,
       );
@@ -59,7 +74,7 @@ export async function generateName(
       });
     }
 
-    console.error("❌ Gemini Error:", error.message);
+    console.error("❌ Gemini Error:", message);
     throw error;
   }
 }
