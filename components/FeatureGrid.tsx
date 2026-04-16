@@ -97,7 +97,7 @@ export default function FeatureGrid() {
               Ready to define your space in the market?
             </p>
           </div>
-          <button className="mt-4 self-start flex items-center gap-2 px-5 py-2.5 bg-white text-namelify-dark rounded-xl text-sm font-bold hover:bg-namelify-accent hover:text-white transition-all group-hover:shadow-lg">
+          <button className="mt-4 self-start flex items-center gap-2 px-5 py-2.5 bg-white text-bg rounded-xl text-sm font-bold hover:bg-namelify-accent hover:text-white transition-all group-hover:shadow-lg">
             Get Started
             <ArrowRight
               size={14}

@@ -39,7 +39,7 @@ tailwind.config.ts — Custom color palette (namelify.*)
 
 | Token             | Hex       | Usage                 |
 | ----------------- | --------- | --------------------- |
-| `namelify-dark`   | `#0D0B14` | Page background       |
+| `bg`              | `#0D0B14` | Page background       |
 | `namelify-panel`  | `#110F1A` | Sidebar, right panel  |
 | `namelify-card`   | `#161221` | Card backgrounds      |
 | `namelify-input`  | `#1A1628` | Input fields          |
