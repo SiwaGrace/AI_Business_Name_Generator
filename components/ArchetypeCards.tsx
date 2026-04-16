@@ -62,7 +62,7 @@ const archetypes = [
 
 export default function ArchetypeCards() {
   const [starred, setStarred] = useState<Record<string, boolean>>(
-    Object.fromEntries(archetypes.map((a) => [a.name, a.starred]))
+    Object.fromEntries(archetypes.map((a) => [a.name, a.starred])),
   );
   const [showing, setShowing] = useState(3);
 
@@ -79,7 +79,7 @@ export default function ArchetypeCards() {
         <h2 className="text-xl font-black text-white tracking-tight">
           Generated Archetypes
         </h2>
-        <span className="text-xs text-nomina-muted bg-white/5 px-3 py-1 rounded-full border border-white/8">
+        <span className="text-xs text-namelify-muted bg-white/5 px-3 py-1 rounded-full border border-white/8">
           Showing {showing} of {archetypes.length}
         </span>
       </div>
@@ -89,7 +89,7 @@ export default function ArchetypeCards() {
         {visible.map((arc) => (
           <div
             key={arc.name}
-            className="group bg-nomina-card border border-white/8 rounded-2xl p-5 hover:border-nomina-accent/30 hover:shadow-xl hover:shadow-nomina-accent/5 transition-all duration-300 cursor-pointer"
+            className="group bg-namelify-card border border-white/8 rounded-2xl p-5 hover:border-namelify-accent/30 hover:shadow-xl hover:shadow-namelify-accent/5 transition-all duration-300 cursor-pointer"
           >
             {/* Top row */}
             <div className="flex items-center justify-between mb-4">
@@ -102,19 +102,22 @@ export default function ArchetypeCards() {
                 onClick={() => toggleStar(arc.name)}
                 className={`transition-colors ${
                   starred[arc.name]
-                    ? "text-nomina-accent"
-                    : "text-nomina-muted hover:text-nomina-accent"
+                    ? "text-namelify-accent"
+                    : "text-namelify-muted hover:text-namelify-accent"
                 }`}
               >
-                <Star size={14} fill={starred[arc.name] ? "currentColor" : "none"} />
+                <Star
+                  size={14}
+                  fill={starred[arc.name] ? "currentColor" : "none"}
+                />
               </button>
             </div>
 
             {/* Name & Description */}
-            <h3 className="text-2xl font-black text-white mb-1 group-hover:text-nomina-accent transition-colors">
+            <h3 className="text-2xl font-black text-white mb-1 group-hover:text-namelify-accent transition-colors">
               {arc.name}
             </h3>
-            <p className="text-sm text-nomina-muted leading-relaxed mb-5">
+            <p className="text-sm text-namelify-muted leading-relaxed mb-5">
               {arc.description}
             </p>
 
@@ -122,11 +125,14 @@ export default function ArchetypeCards() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 {arc.domainStatus === "available" ? (
-                  <CheckCircle size={12} className="text-emerald-400 shrink-0" />
+                  <CheckCircle
+                    size={12}
+                    className="text-emerald-400 shrink-0"
+                  />
                 ) : (
                   <AlertCircle size={12} className="text-amber-400 shrink-0" />
                 )}
-                <span className="text-xs text-nomina-muted">
+                <span className="text-xs text-namelify-muted">
                   {arc.domain}
                   {arc.domainStatus === "premium" && (
                     <span className="ml-1 text-amber-400">premium</span>
@@ -138,7 +144,7 @@ export default function ArchetypeCards() {
               </div>
               <ArrowRight
                 size={14}
-                className="text-nomina-muted group-hover:text-nomina-accent group-hover:translate-x-0.5 transition-all"
+                className="text-namelify-muted group-hover:text-namelify-accent group-hover:translate-x-0.5 transition-all"
               />
             </div>
           </div>
@@ -149,8 +155,10 @@ export default function ArchetypeCards() {
       {showing < archetypes.length && (
         <div className="flex justify-center mt-6">
           <button
-            onClick={() => setShowing((v) => Math.min(v + 3, archetypes.length))}
-            className="px-6 py-2.5 rounded-xl border border-white/10 text-sm text-nomina-muted hover:text-white hover:border-nomina-accent/40 transition-all"
+            onClick={() =>
+              setShowing((v) => Math.min(v + 3, archetypes.length))
+            }
+            className="px-6 py-2.5 rounded-xl border border-white/10 text-sm text-namelify-muted hover:text-white hover:border-namelify-accent/40 transition-all"
           >
             Show More
           </button>

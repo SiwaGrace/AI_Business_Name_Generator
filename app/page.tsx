@@ -11,7 +11,7 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-nomina-dark flex">
+    <div className="min-h-screen bg-namelify-dark flex">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -36,12 +36,12 @@ export default function Home() {
           </div>
 
           {/* Right Panel */}
-          <aside className="hidden xl:flex flex-col w-64 shrink-0 border-l border-white/5 bg-nomina-panel px-5 py-6 gap-6">
+          <aside className="hidden xl:flex flex-col w-64 shrink-0 border-l border-white/5 bg-namelify-panel px-5 py-6 gap-6">
             <div>
-              <p className="text-[11px] font-semibold tracking-widest text-nomina-muted uppercase mb-4">
+              <p className="text-[11px] font-semibold tracking-widest text-namelify-muted uppercase mb-4">
                 Saved Names
               </p>
-              <p className="text-[10px] tracking-widest text-nomina-muted/50 uppercase mb-5">
+              <p className="text-[10px] tracking-widest text-namelify-muted/50 uppercase mb-5">
                 Your Curated Collection
               </p>
               <div className="space-y-3">
@@ -54,9 +54,9 @@ export default function Home() {
                       <p className="text-sm font-semibold text-white">
                         {n.name}
                       </p>
-                      <p className="text-[11px] text-nomina-muted">{n.tag}</p>
+                      <p className="text-[11px] text-namelify-muted">{n.tag}</p>
                     </div>
-                    <span className="text-nomina-accent group-hover:scale-110 transition-transform">
+                    <span className="text-namelify-accent group-hover:scale-110 transition-transform">
                       ★
                     </span>
                   </div>
@@ -65,11 +65,11 @@ export default function Home() {
             </div>
 
             <div className="mt-auto space-y-3">
-              {/* <button className="w-full py-3 rounded-xl bg-linear-to-r from-nomina-accent to-violet-500 text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-nomina-accent/20">
+              {/* <button className="w-full py-3 rounded-xl bg-linear-to-r from-namelify-accent to-violet-500 text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-namelify-accent/20">
                 Upgrade to Pro
               </button> */}
-              <button className="w-full text-xs text-nomina-muted flex items-center justify-center gap-1.5 hover:text-white transition-colors">
-                <span className="w-1.5 h-1.5 rounded-full bg-nomina-accent inline-block" />
+              <button className="w-full text-xs text-namelify-muted flex items-center justify-center gap-1.5 hover:text-white transition-colors">
+                <span className="w-1.5 h-1.5 rounded-full bg-namelify-accent inline-block" />
                 Help Center
               </button>
             </div>

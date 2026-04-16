@@ -37,7 +37,14 @@ export async function generateName(
   Industry: ${industry}
   Tone: ${tone}
  Target Words: Around ${count} words per name.
-  Format: Return the names as a numbered list.`;
+  Format: Return ONLY a comma-separated list of names.
+- No brackets
+- No JSON
+- No explanations
+- No extra text
+
+Example:
+Name One, Name Two, Name Three`;
 
   try {
     const result = await model.generateContent(prompt);
@@ -59,7 +66,10 @@ export async function generateName(
           ? error
           : "Unknown error";
 
-    if (retries > 0 && (status === 429 || (typeof status === "number" && status >= 500))) {
+    if (
+      retries > 0 &&
+      (status === 429 || (typeof status === "number" && status >= 500))
+    ) {
       console.log(
         `⚠️ Request failed. Retrying in ${delay}ms... (${retries} retries left)`,
       );

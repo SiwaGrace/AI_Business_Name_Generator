@@ -1,4 +1,4 @@
-# NominaAI — Next.js App
+# namelifyAI — Next.js App
 
 ## Setup
 
@@ -32,19 +32,19 @@ components/
   ArchetypeCards.tsx — Generated name result cards
   FeatureGrid.tsx  — Feature highlights grid
 
-tailwind.config.ts — Custom color palette (nomina.*)
+tailwind.config.ts — Custom color palette (namelify.*)
 ```
 
 ## Custom Colors
 
-| Token           | Hex       | Usage                 |
-| --------------- | --------- | --------------------- |
-| `nomina-dark`   | `#0D0B14` | Page background       |
-| `nomina-panel`  | `#110F1A` | Sidebar, right panel  |
-| `nomina-card`   | `#161221` | Card backgrounds      |
-| `nomina-input`  | `#1A1628` | Input fields          |
-| `nomina-accent` | `#7C5CFC` | Primary purple accent |
-| `nomina-muted`  | `#7B7592` | Secondary text        |
+| Token             | Hex       | Usage                 |
+| ----------------- | --------- | --------------------- |
+| `namelify-dark`   | `#0D0B14` | Page background       |
+| `namelify-panel`  | `#110F1A` | Sidebar, right panel  |
+| `namelify-card`   | `#161221` | Card backgrounds      |
+| `namelify-input`  | `#1A1628` | Input fields          |
+| `namelify-accent` | `#7C5CFC` | Primary purple accent |
+| `namelify-muted`  | `#7B7592` | Secondary text        |
 
 ## Responsive Behaviour
 

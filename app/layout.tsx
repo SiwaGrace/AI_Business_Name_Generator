@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "NominaAI — Name Your Vision",
+  title: "namelifyAI — Name Your Vision",
   description:
     "The Kinetic Editorial AI engine crafts names that resonate, disrupt, and endure.",
 };
