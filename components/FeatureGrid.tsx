@@ -34,37 +34,37 @@ export default function FeatureGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         {/* Neural Semantics - wide on desktop */}
         <div
-          className={`lg:col-span-2 relative overflow-hidden bg-namelify-card border border-white/8 rounded-2xl p-6 hover:border-namelify-accent/30 transition-all duration-300 group`}
+          className={`group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-accent/25 lg:col-span-2`}
         >
           <div
             className={`absolute inset-0 bg-linear-to-br ${features[0].gradient} opacity-60`}
           />
           <div className="relative z-10">
             <div
-              className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-4 ${features[0].accent}`}
+              className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-surface ${features[0].accent}`}
             >
               <Brain size={20} />
             </div>
-            <h3 className="text-lg font-black text-white mb-2">
+            <h3 className="mb-2 font-heading text-lg font-black text-heading">
               {features[0].title}
             </h3>
-            <p className="text-sm text-namelify-muted leading-relaxed">
+            <p className="text-sm leading-relaxed text-body">
               {features[0].description}
             </p>
           </div>
         </div>
 
         {/* Domain Sync */}
-        <div className="relative overflow-hidden bg-namelify-card border border-white/8 rounded-2xl p-6 hover:border-sky-400/30 transition-all duration-300 group text-center flex flex-col items-center justify-center">
+        <div className="group relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border border-border bg-card p-6 text-center transition-all duration-300 hover:border-sky-400/30">
           <div className="absolute inset-0 bg-linear-to-br from-sky-600/15 to-transparent opacity-60" />
           <div className="relative z-10 flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-sky-400/10 flex items-center justify-center text-sky-400 mb-3">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-sky-400/10 text-sky-400">
               <Globe size={22} />
             </div>
-            <h3 className="text-base font-black text-white mb-1">
+            <h3 className="mb-1 font-heading text-base font-black text-heading">
               Domain Sync
             </h3>
-            <p className="text-xs text-namelify-muted leading-relaxed">
+            <p className="text-xs leading-relaxed text-body">
               Real-time availability for .com, .ai, and .io
             </p>
           </div>
@@ -74,30 +74,30 @@ export default function FeatureGrid() {
       {/* Bottom row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Brand Kits */}
-        <div className="relative overflow-hidden bg-namelify-card border border-white/8 rounded-2xl p-6 hover:border-fuchsia-400/30 transition-all duration-300 group flex items-center gap-5">
+        <div className="group relative flex items-center gap-5 overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-fuchsia-400/30">
           <div className="absolute inset-0 bg-linear-to-r from-fuchsia-600/15 to-transparent opacity-60" />
-          <div className="relative z-10 w-12 h-12 rounded-full bg-fuchsia-400/10 flex items-center justify-center text-fuchsia-400 shrink-0">
+          <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-fuchsia-400/10 text-fuchsia-400">
             <Layers size={22} />
           </div>
           <div className="relative z-10">
-            <h3 className="text-base font-black text-white mb-1">Brand Kits</h3>
-            <p className="text-xs text-namelify-muted leading-relaxed">
+            <h3 className="mb-1 font-heading text-base font-black text-heading">Brand Kits</h3>
+            <p className="text-xs leading-relaxed text-body">
               Instantly generate logos & palettes for your new name.
             </p>
           </div>
         </div>
 
         {/* CTA */}
-        <div className="relative overflow-hidden bg-linear-to-br from-namelify-accent/20 to-violet-600/20 border border-namelify-accent/20 rounded-2xl p-6 flex flex-col justify-between hover:border-namelify-accent/50 transition-all duration-300 group">
+        <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-accent/20 bg-linear-to-br from-accent-dim to-primary-glow p-6 transition-all duration-300 hover:border-accent/45">
           <div>
-            <h3 className="text-lg font-black text-white mb-1">
+            <h3 className="mb-1 font-heading text-lg font-black text-heading">
               Join 10k+ Creators
             </h3>
-            <p className="text-xs text-namelify-muted">
+            <p className="text-xs text-body">
               Ready to define your space in the market?
             </p>
           </div>
-          <button className="mt-4 self-start flex items-center gap-2 px-5 py-2.5 bg-white text-bg rounded-xl text-sm font-bold hover:bg-namelify-accent hover:text-white transition-all group-hover:shadow-lg">
+          <button className="mt-4 flex self-start items-center gap-2 rounded-xl bg-heading px-5 py-2.5 text-sm font-bold text-bg transition-all hover:bg-accent hover:text-on-primary group-hover:shadow-lg">
             Get Started
             <ArrowRight
               size={14}

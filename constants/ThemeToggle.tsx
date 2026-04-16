@@ -11,7 +11,7 @@ export default function ThemeToggle() {
       <button
         aria-label="Theme loading"
         disabled
-        className="p-2 rounded-full bg-surface text-muted"
+        className="rounded-full border border-border bg-surface p-2 text-muted"
       >
         <Sun size={20} className="opacity-0" />
       </button>
@@ -22,7 +22,7 @@ export default function ThemeToggle() {
     <button
       onClick={() => setIsDark((prev) => !prev)}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="p-2 rounded-full bg-surface text-heading transition hover:scale-110"
+      className="rounded-full border border-border bg-surface p-2 text-heading transition hover:border-border-hover hover:bg-card hover:scale-110"
     >
       {isDark ? <Sun size={20} /> : <Moon size={20} />}
     </button>

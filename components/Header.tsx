@@ -1,7 +1,7 @@
 "use client";
 
 import ThemeToggle from "@/constants/ThemeToggle";
-import { Menu, Settings } from "lucide-react";
+import { Menu, Settings, Sparkles } from "lucide-react";
 import { useSyncExternalStore } from "react";
 
 interface HeaderProps {
@@ -16,27 +16,21 @@ export default function Header({ onMenuToggle }: HeaderProps) {
     () => false
   );
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between px-4 md:px-8 h-14 border-b border-border bg-bg/80 backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-bg/85 px-4 backdrop-blur-md md:px-8">
       {/* Left: Hamburger (mobile) + Logo (mobile only) */}
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuToggle}
-          className="lg:hidden p-2 rounded-lg hover:bg-surface text-muted hover:text-heading transition-colors"
+          className="rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-heading lg:hidden"
           aria-label="Toggle menu"
         >
           <Menu size={20} />
         </button>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-linear-to-br from-primary to-primary-dim rounded-lg flex items-center justify-center text-on-primary">
-            <span
-              className="material-symbols-outlined text-lg"
-              data-weight="fill"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              auto_awesome
-            </span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-primary-dim text-on-primary shadow-lg shadow-primary-glow/70">
+            <Sparkles size={16} />
           </div>
-          <span className="text-2xl font-bold text-heading font-['Plus_Jakarta_Sans'] tracking-tight">
+          <span className="font-heading text-2xl font-bold tracking-tight text-heading">
             Namelify AI
           </span>
         </div>
@@ -66,10 +60,10 @@ export default function Header({ onMenuToggle }: HeaderProps) {
         ) : (
           <div className="h-9 w-9 rounded-full bg-surface" aria-hidden="true" />
         )}
-        <button className="p-2 rounded-lg hover:bg-surface text-muted hover:text-heading transition-colors hidden sm:flex">
+        <button className="hidden rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-heading sm:flex">
           <Settings size={16} />
         </button>
-        <div className="w-8 h-8 rounded-full bg-linear-to-br from-accent to-primary-dim flex items-center justify-center text-xs font-bold text-on-primary">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-accent to-primary-dim text-xs font-bold text-on-primary shadow-lg shadow-primary-glow/60">
           JD
         </div>
       </div>

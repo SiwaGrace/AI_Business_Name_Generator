@@ -11,14 +11,14 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg flex">
+    <div className="flex min-h-screen bg-bg">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 z-30 lg:hidden"
+          className="fixed inset-0 z-30 bg-overlay/80 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -36,27 +36,27 @@ export default function Home() {
           </div>
 
           {/* Right Panel */}
-          <aside className="hidden xl:flex flex-col w-64 shrink-0 border-l border-white/5 bg-namelify-panel px-5 py-6 gap-6">
+          <aside className="hidden w-64 shrink-0 flex-col gap-6 border-l border-border bg-surface px-5 py-6 xl:flex">
             <div>
-              <p className="text-[11px] font-semibold tracking-widest text-namelify-muted uppercase mb-4">
+              <p className="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted">
                 Saved Names
               </p>
-              <p className="text-[10px] tracking-widest text-namelify-muted/50 uppercase mb-5">
+              <p className="mb-5 text-[10px] uppercase tracking-widest text-muted/60">
                 Your Curated Collection
               </p>
               <div className="space-y-3">
                 {savedNames.map((n) => (
                   <div
                     key={n.name}
-                    className="flex items-center justify-between bg-white/5 rounded-xl px-4 py-3 hover:bg-white/10 transition-colors cursor-pointer group"
+                    className="group flex cursor-pointer items-center justify-between rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/25 hover:bg-bg"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-white">
+                      <p className="text-sm font-semibold text-heading">
                         {n.name}
                       </p>
-                      <p className="text-[11px] text-namelify-muted">{n.tag}</p>
+                      <p className="text-[11px] text-muted">{n.tag}</p>
                     </div>
-                    <span className="text-namelify-accent group-hover:scale-110 transition-transform">
+                    <span className="text-accent transition-transform group-hover:scale-110">
                       ★
                     </span>
                   </div>
@@ -68,8 +68,8 @@ export default function Home() {
               {/* <button className="w-full py-3 rounded-xl bg-linear-to-r from-namelify-accent to-violet-500 text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-namelify-accent/20">
                 Upgrade to Pro
               </button> */}
-              <button className="w-full text-xs text-namelify-muted flex items-center justify-center gap-1.5 hover:text-white transition-colors">
-                <span className="w-1.5 h-1.5 rounded-full bg-namelify-accent inline-block" />
+              <button className="flex w-full items-center justify-center gap-1.5 text-xs text-muted transition-colors hover:text-heading">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
                 Help Center
               </button>
             </div>

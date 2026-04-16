@@ -18,20 +18,20 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col fixed top-0 left-0 h-full w-52 bg-namelify-panel border-r border-white/5 z-40 px-3 py-6">
-        <SidebarContent onClose={onClose} isOpen={isOpen} />
+      <aside className="fixed top-0 left-0 z-40 hidden h-full w-52 flex-col border-r border-border bg-surface px-3 py-6 lg:flex">
+        <SidebarContent onClose={onClose} />
       </aside>
 
-      {/* Mobile Sidebar bg-namelify-panel*/}
+      {/* Mobile Sidebar */}
       <aside
-        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-black border-r border-white/5 z-40 px-3 py-6 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 z-40 h-full w-64 border-r border-border bg-surface px-3 py-6 transition-transform duration-300 ease-in-out lg:hidden ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/10 text-namelify-muted hover:text-white transition-colors"
+            className="rounded-lg p-2 text-muted transition-colors hover:bg-card hover:text-heading"
           >
             <X size={18} />
           </button>
@@ -44,17 +44,15 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
 function SidebarContent({
   onClose,
-  isOpen,
 }: {
   onClose: () => void;
-  isOpen?: boolean;
 }) {
   return (
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="px-3 mb-8">
-        <span className="text-lg font-black tracking-tight text-white">
-          Namelify<span className="text-namelify-accent">AI</span>
+        <span className="font-heading text-lg font-black tracking-tight text-heading">
+          Namelify<span className="text-accent">AI</span>
         </span>
       </div>
 
@@ -67,8 +65,8 @@ function SidebarContent({
             onClick={onClose}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
               active
-                ? "bg-namelify-accent/20 text-namelify-accent border border-namelify-accent/30"
-                : "text-namelify-muted hover:bg-white/5 hover:text-white"
+                ? "border border-accent/30 bg-accent-dim text-accent"
+                : "text-muted hover:bg-card hover:text-heading"
             }`}
           >
             <Icon size={16} />
