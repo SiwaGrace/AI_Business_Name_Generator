@@ -9,13 +9,13 @@ import FeatureGrid from "@/components/FeatureGrid";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [result, setResult] = useState<string[] | string | null>(null);
+  const [isPending, setIsPending] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-bg">
-      {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      {/* Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-30 bg-overlay/80 lg:hidden"
@@ -23,19 +23,20 @@ export default function Home() {
         />
       )}
 
-      {/* Main Layout */}
       <div className="flex flex-col flex-1 min-h-screen lg:ml-52">
         <Header onMenuToggle={() => setSidebarOpen((v) => !v)} />
 
         <main className="flex-1 flex flex-col lg:flex-row gap-0">
-          {/* Center Content */}
           <div className="flex-1 px-4 md:px-8 py-6 space-y-10">
-            <GeneratorPanel />
-            <ArchetypeCards />
+            <GeneratorPanel
+              onResult={setResult}
+              onPending={setIsPending}
+              isPending={isPending}
+            />
+            <ArchetypeCards result={result} />
             <FeatureGrid />
           </div>
 
-          {/* Right Panel */}
           <aside className="hidden w-64 shrink-0 flex-col gap-6 border-l border-border bg-surface px-5 py-6 xl:flex">
             <div>
               <p className="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted">
@@ -45,6 +46,7 @@ export default function Home() {
                 Your Curated Collection
               </p>
               <div className="space-y-3">
+                {/* TODO: replace with localStorage starred names */}
                 {savedNames.map((n) => (
                   <div
                     key={n.name}
@@ -64,10 +66,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-auto space-y-3">
-              {/* <button className="w-full py-3 rounded-xl bg-linear-to-r from-namelify-accent to-violet-500 text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-namelify-accent/20">
-                Upgrade to Pro
-              </button> */}
+            <div className="mt-auto">
               <button className="flex w-full items-center justify-center gap-1.5 text-xs text-muted transition-colors hover:text-heading">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
                 Help Center

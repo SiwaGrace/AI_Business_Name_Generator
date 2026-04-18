@@ -1,8 +1,8 @@
 "use client";
 
-import { handleGenerate } from "@/actions/generateNameAction";
-import { Zap, ChevronDown } from "lucide-react";
 import { useState, type FormEvent } from "react";
+import { Zap, ChevronDown } from "lucide-react";
+import { handleGenerate } from "@/actions/generateNameAction";
 
 const industries = [
   "Fintech & Web3",
@@ -24,9 +24,17 @@ const tones = [
 ];
 const countOptions = [1, 2, 3, 4, 5];
 
-export default function GeneratorPanel() {
-  const [result, setResult] = useState<string[]>([]);
-  const [isPending, setIsPending] = useState(false);
+type Props = {
+  onResult: (result: string[] | string) => void;
+  onPending: (pending: boolean) => void;
+  isPending: boolean;
+};
+
+export default function GeneratorPanel({
+  onResult,
+  onPending,
+  isPending,
+}: Props) {
   const [description, setDescription] = useState("");
   const [industry, setIndustry] = useState("Fintech & Web3");
   const [count, setCount] = useState(2);
@@ -34,72 +42,51 @@ export default function GeneratorPanel() {
   const [selectedTones, setSelectedTones] = useState<string[]>(["Minimalist"]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const lengthStyle =
+    length <= 8 ? "Focused" : length <= 16 ? "Balanced" : "Expansive";
+
   const toggleTone = (tone: string) => {
     setSelectedTones((prev) =>
       prev.includes(tone) ? prev.filter((t) => t !== tone) : [...prev, tone],
     );
   };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsPending(true);
+    onPending(true);
     try {
       const formData = new FormData(event.currentTarget);
-      const countInput = formData.get("count");
-      const parsedCount =
-        typeof countInput === "string" ? parseInt(countInput, 10) : count;
-      const safeCount = Number.isNaN(parsedCount) ? count : parsedCount;
-      formData.set("count", String(safeCount));
-      const lengthInput = formData.get("length");
-      const parsedLength =
-        typeof lengthInput === "string" ? parseInt(lengthInput, 10) : length;
-      const safeLength = Number.isNaN(parsedLength) ? length : parsedLength;
-      formData.set("length", String(safeLength));
+
+      const parsedCount = parseInt(formData.get("count") as string, 10);
+      formData.set(
+        "count",
+        String(Number.isNaN(parsedCount) ? count : parsedCount),
+      );
+
+      const parsedLength = parseInt(formData.get("length") as string, 10);
+      formData.set(
+        "length",
+        String(Number.isNaN(parsedLength) ? length : parsedLength),
+      );
+
       const response = await handleGenerate(null, formData);
       if (!response) throw new Error("No response");
-      let names: string[] = [];
-
-      // Clean markdown if present
-      try {
-        const clean = response
-          .replace(/```json/g, "")
-          .replace(/```/g, "")
-          .trim();
-
-        console.log("Clean response:", clean);
-
-        names = clean
-          .split(",")
-          .map((n) => n.trim())
-          .filter(Boolean);
-      } catch (err) {
-        console.error("Parsing failed:", err);
-
-        names = response
-          .split(",")
-          .map((n) => n.trim())
-          .filter(Boolean);
-      }
-      console.log("Parsed names:", names);
-      setResult(names);
+      onResult(response);
     } catch (error) {
       console.error(error);
-      setResult([
+      onResult(
         "An error occurred while generating the name. Please try again.",
-      ] as string[]);
+      );
     } finally {
-      setIsPending(false);
+      onPending(false);
     }
   };
-  const lengthStyle =
-    length <= 8 ? "Focused" : length <= 16 ? "Balanced" : "Expansive";
 
   return (
     <div className="relative max-w-2xl mx-auto">
-      {/* Background glow */}
       <div className="absolute inset-0 -z-10 rounded-2xl bg-linear-to-b from-primary-glow to-transparent blur-2xl" />
 
       <div className="shadow-theme-card rounded-2xl border border-border bg-card p-6 md:p-8">
-        {/* Title */}
         <div className="text-center mb-8">
           <h1 className="mb-2 font-heading text-3xl font-black tracking-tight text-heading md:text-4xl">
             Name Your Vision.
@@ -127,9 +114,8 @@ export default function GeneratorPanel() {
             />
           </div>
 
-          {/* Industry + Length */}
+          {/* Industry + Suggestions */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Industry Dropdown */}
             <div>
               <label className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-muted">
                 Industry
@@ -170,7 +156,6 @@ export default function GeneratorPanel() {
               </div>
             </div>
 
-            {/* Length Slider */}
             <div>
               <label className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-muted">
                 Name Variations
@@ -200,7 +185,8 @@ export default function GeneratorPanel() {
               </div>
             </div>
           </div>
-          {/* Name Length (words per name) */}
+
+          {/* Name Length */}
           <div>
             <label className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-muted">
               Name Length
@@ -258,6 +244,7 @@ export default function GeneratorPanel() {
               ))}
             </div>
           </div>
+
           <input type="hidden" name="industry" value={industry} />
           <input
             type="hidden"
@@ -268,7 +255,6 @@ export default function GeneratorPanel() {
           />
           <input type="hidden" name="count" value={count} />
 
-          {/* CTA */}
           <button
             type="submit"
             disabled={isPending}
@@ -287,18 +273,6 @@ export default function GeneratorPanel() {
             )}
           </button>
         </form>
-        {result && (
-          <div className="mt-6 rounded-xl border border-border bg-surface p-4">
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted">
-              Generated Names
-            </p>
-            {result.map((name: string) => (
-              <div key={name}>
-                <p className="text-sm text-body">{name}</p>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

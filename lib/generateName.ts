@@ -12,15 +12,15 @@ interface GenerateOptions {
   delay?: number;
 }
 
+// Change return type from Promise<string> to Promise<string[]>
 export async function generateName(
   text: string,
-  options: GenerateOptions = {}, // Use an object for optional params
-): Promise<string> {
-  // Destructure with default values
+  options: GenerateOptions = {},
+): Promise<string[]> {
   const {
     industry = "General",
     tone = "Professional",
-    length = 1,
+    length = 5,
     count = 1,
     retries = 5,
     delay = 1000,
@@ -28,55 +28,44 @@ export async function generateName(
 
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-  if (!text || !text.trim()) {
-    throw new Error("Text is required and cannot be empty");
-  }
+  if (!text?.trim()) throw new Error("Text is required and cannot be empty");
 
-  const prompt = `Please provide exactly ${length} concise and unique name for the following content:
+  const prompt = `Please provide exactly ${length} concise and unique names for the following content:
   Content: ${text}
   Industry: ${industry}
   Tone: ${tone}
- Target Words: Around ${count} words per name.
+  Target Words: Around ${count} words per name.
   Format: Return ONLY a comma-separated list of names.
-- No brackets
-- No JSON
-- No explanations
-- No extra text
-
-Example:
-Name One, Name Two, Name Three`;
+  - No brackets
+  - No JSON
+  - No explanations
+  - No extra text
+  Example: Name One, Name Two, Name Three`;
 
   try {
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
+    console.log("Raw response from Gemini:", await result.response.text()); // Log raw response for debugging
+    const raw = result.response.text();
+
+    // Parse comma-separated string into clean array
+    const names = raw
+      .replace(/```json|```/g, "")
+      .split(",")
+      .map((n) => n.trim())
+      .filter(Boolean);
+
+    return names;
   } catch (error: unknown) {
     const status =
-      typeof error === "object" &&
-      error !== null &&
-      "status" in error &&
-      typeof (error as { status?: unknown }).status === "number"
+      typeof error === "object" && error !== null && "status" in error
         ? (error as { status: number }).status
         : undefined;
-
-    const message =
-      error instanceof Error
-        ? error.message
-        : typeof error === "string"
-          ? error
-          : "Unknown error";
 
     if (
       retries > 0 &&
       (status === 429 || (typeof status === "number" && status >= 500))
     ) {
-      console.log(
-        `⚠️ Request failed. Retrying in ${delay}ms... (${retries} retries left)`,
-      );
-
       await new Promise((resolve) => setTimeout(resolve, delay));
-
-      // Now the recursion is clean!
       return generateName(text, {
         ...options,
         retries: retries - 1,
@@ -84,7 +73,6 @@ Name One, Name Two, Name Three`;
       });
     }
 
-    console.error("❌ Gemini Error:", message);
     throw error;
   }
 }
