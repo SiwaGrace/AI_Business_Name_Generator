@@ -5,7 +5,9 @@ import React, { useEffect, useState } from "react";
 const STORAGE_KEY = "savedNames";
 
 const StarredPage = () => {
-  const [savedNames, setSavedNames] = useState<{ name: string; tag: string }[]>([]);
+  const [savedNames, setSavedNames] = useState<{ name: string; tag: string }[]>(
+    [],
+  );
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -33,7 +35,9 @@ const StarredPage = () => {
                 className="rounded-xl border border-border bg-card p-4"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-semibold text-heading">{item.name}</h3>
+                  <h3 className="text-lg font-semibold text-heading">
+                    {item.name}
+                  </h3>
                   <span className="text-accent">★</span>
                 </div>
                 <p className="text-sm text-muted">{item.tag}</p>
