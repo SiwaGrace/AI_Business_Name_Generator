@@ -26,7 +26,9 @@ const StarredPage = () => {
   }, []);
 
   const handleRemoveFavorite = (nameToRemove: string) => {
-    const updatedNames = savedNames.filter((item) => item.name !== nameToRemove);
+    const updatedNames = savedNames.filter(
+      (item) => item.name !== nameToRemove,
+    );
     setSavedNames(updatedNames);
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedNames));
