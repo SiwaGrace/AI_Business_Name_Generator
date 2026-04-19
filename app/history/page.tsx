@@ -3,12 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import { Clock } from "lucide-react";
+import { Clock, ChevronDown } from "lucide-react";
 
 const STORAGE_KEY_HISTORY = "searchHistory";
 
 const HistoryPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [searchHistory, setSearchHistory] = useState<
     {
       id: string;
@@ -104,19 +105,40 @@ const HistoryPage = () => {
 
                   {/* Results */}
                   <div>
-                    <h3 className="text-lg font-semibold text-heading mb-3">
-                      Generated Names ({search.results.length})
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {search.results.map((name, index) => (
-                        <div
-                          key={index}
-                          className="bg-surface border border-border rounded-xl p-3"
-                        >
-                          <p className="font-medium text-heading">{name}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedIds((current) =>
+                          current.includes(search.id)
+                            ? current.filter((id) => id !== search.id)
+                            : [...current, search.id],
+                        )
+                      }
+                      className="mb-3 flex w-full items-center justify-between rounded-xl border border-border bg-surface px-4 py-3 text-left text-sm font-semibold text-heading transition hover:border-accent/40 hover:bg-accent-dim"
+                    >
+                      <span>Generated Names ({search.results.length})</span>
+                      <ChevronDown
+                        size={18}
+                        className={`transition-transform duration-200 ${
+                          expandedIds.includes(search.id)
+                            ? "rotate-180"
+                            : "rotate-0"
+                        }`}
+                      />
+                    </button>
+
+                    {expandedIds.includes(search.id) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {search.results.map((name, index) => (
+                          <div
+                            key={index}
+                            className="bg-surface border border-border rounded-xl p-3"
+                          >
+                            <p className="font-medium text-heading">{name}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

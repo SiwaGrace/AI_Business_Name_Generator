@@ -8,12 +8,11 @@ interface HeaderProps {
   onMenuToggle: () => void;
 }
 
-
 export default function Header({ onMenuToggle }: HeaderProps) {
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
-    () => false
+    () => false,
   );
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-bg/85 px-4 backdrop-blur-md md:px-8">
@@ -60,12 +59,12 @@ export default function Header({ onMenuToggle }: HeaderProps) {
         ) : (
           <div className="h-9 w-9 rounded-full bg-surface" aria-hidden="true" />
         )}
-        <button className="hidden rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-heading sm:flex">
+        {/* <button className="hidden rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-heading sm:flex">
           <Settings size={16} />
         </button>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-accent to-primary-dim text-xs font-bold text-on-primary shadow-lg shadow-primary-glow/60">
           JD
-        </div>
+        </div> */}
       </div>
     </header>
   );

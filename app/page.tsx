@@ -176,7 +176,7 @@ export default function Home() {
             <FeatureGrid />
           </div>
 
-          <aside className="hidden w-64 shrink-0 flex-col gap-6 border-l border-border bg-surface px-5 py-6 xl:flex">
+          <aside className="w-full xl:w-64 shrink-0 flex-col gap-6 border-l border-border bg-surface px-5 py-6 xl:flex">
             <div>
               <p className="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted">
                 Saved Names
@@ -222,7 +222,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-auto">
+            <div className="mt-20 xl:mt-auto">
               <button className="flex w-full items-center justify-center gap-1.5 text-xs text-muted transition-colors hover:text-heading">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
                 Help Center
