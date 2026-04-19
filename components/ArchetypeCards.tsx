@@ -5,15 +5,14 @@ import { Star, ArrowRight } from "lucide-react";
 
 export default function ArchetypeCards({
   result,
+  starred,
+  onFavoriteToggle,
 }: {
   result: string[] | string | null;
+  starred: Record<string, boolean>;
+  onFavoriteToggle: (name: string) => void;
 }) {
-  const [starred, setStarred] = useState<Record<string, boolean>>({});
   const [showing, setShowing] = useState(3);
-
-  const toggleStar = (name: string) => {
-    setStarred((prev) => ({ ...prev, [name]: !prev[name] }));
-  };
 
   // Use real data if available, otherwise empty
   const data: string[] = Array.isArray(result) ? result : [];
@@ -44,7 +43,7 @@ export default function ArchetypeCards({
             {/* Top row */}
             <div className="flex items-center justify-between mb-4">
               <button
-                onClick={() => toggleStar(item)}
+                onClick={() => onFavoriteToggle(item)}
                 className={`transition-colors ${
                   starred[item] ? "text-accent" : "text-muted hover:text-accent"
                 }`}

@@ -1,16 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import GeneratorPanel from "@/components/GeneratorPanel";
 import ArchetypeCards from "@/components/ArchetypeCards";
 import FeatureGrid from "@/components/FeatureGrid";
 
+const STORAGE_KEY = "savedNames";
+
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [result, setResult] = useState<string[] | string | null>(null);
   const [isPending, setIsPending] = useState(false);
+  const [savedNames, setSavedNames] = useState<
+    {
+      name: string;
+      tag: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        setSavedNames(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.error("Failed to load saved names from localStorage", error);
+    }
+  }, []);
+
+  const saveToStorage = (items: typeof savedNames) => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch (error) {
+      console.error("Failed to save saved names to localStorage", error);
+    }
+  };
+
+  const handleToggleFavorite = (name: string) => {
+    setSavedNames((current) => {
+      const alreadySaved = current.some((item) => item.name === name);
+      const next = alreadySaved
+        ? current.filter((item) => item.name !== name)
+        : [{ name, tag: "AI Generated" }, ...current];
+      saveToStorage(next);
+      return next;
+    });
+  };
+
+  const starred = useMemo(
+    () =>
+      savedNames.reduce<Record<string, boolean>>((map, item) => {
+        map[item.name] = true;
+        return map;
+      }, {}),
+    [savedNames],
+  );
 
   return (
     <div className="flex min-h-screen bg-bg">
@@ -33,7 +83,11 @@ export default function Home() {
               onPending={setIsPending}
               isPending={isPending}
             />
-            <ArchetypeCards result={result} />
+            <ArchetypeCards
+              result={result}
+              starred={starred}
+              onFavoriteToggle={handleToggleFavorite}
+            />
             <FeatureGrid />
           </div>
 
@@ -46,23 +100,40 @@ export default function Home() {
                 Your Curated Collection
               </p>
               <div className="space-y-3">
-                {/* TODO: replace with localStorage starred names */}
-                {savedNames.map((n) => (
-                  <div
-                    key={n.name}
-                    className="group flex cursor-pointer items-center justify-between rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/25 hover:bg-bg"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-heading">
-                        {n.name}
-                      </p>
-                      <p className="text-[11px] text-muted">{n.tag}</p>
-                    </div>
-                    <span className="text-accent transition-transform group-hover:scale-110">
-                      ★
-                    </span>
-                  </div>
-                ))}
+                {savedNames.length === 0 ? (
+                  <p className="text-sm text-muted">
+                    No favorites yet. Click the star icon on a generated name to
+                    save it.
+                  </p>
+                ) : (
+                  <>
+                    {savedNames.slice(0, 3).map((n) => (
+                      <div
+                        key={n.name}
+                        className="group flex cursor-pointer items-center justify-between rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/25 hover:bg-bg"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-heading">
+                            {n.name}
+                          </p>
+                          <p className="text-[11px] text-muted">{n.tag}</p>
+                        </div>
+                        <span className="text-accent transition-transform group-hover:scale-110">
+                          ★
+                        </span>
+                      </div>
+                    ))}
+                    {savedNames.length > 3 && (
+                      <Link
+                        href="/starred"
+                        className="flex items-center justify-center gap-1 text-xs text-primary hover:underline"
+                      >
+                        more
+                        <ArrowRight size={12} />
+                      </Link>
+                    )}
+                  </>
+                )}
               </div>
             </div>
 
@@ -78,9 +149,3 @@ export default function Home() {
     </div>
   );
 }
-
-const savedNames = [
-  { name: "Velocean", tag: "Tech & Marine" },
-  { name: "Lumina", tag: "Innovation" },
-  { name: "Marisys", tag: "Data & Ocean" },
-];
