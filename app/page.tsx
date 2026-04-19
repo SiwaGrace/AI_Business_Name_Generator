@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
@@ -10,7 +10,7 @@ import ArchetypeCards from "@/components/ArchetypeCards";
 import FeatureGrid from "@/components/FeatureGrid";
 
 const STORAGE_KEY_SAVED = "savedNames";
-const STORAGE_KEY_RESULTS = "generatedResults";
+const STORAGE_KEY_GENERATED = "generatedNames";
 const STORAGE_KEY_HISTORY = "searchHistory";
 
 export default function Home() {
@@ -35,6 +35,7 @@ export default function Home() {
       results: string[];
     }[]
   >([]);
+  const historyLoaded = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -43,7 +44,7 @@ export default function Home() {
       if (storedSaved) {
         setSavedNames(JSON.parse(storedSaved));
       }
-      const storedResults = window.localStorage.getItem(STORAGE_KEY_RESULTS);
+      const storedResults = window.localStorage.getItem(STORAGE_KEY_GENERATED);
       if (storedResults) {
         setResult(JSON.parse(storedResults));
       }
@@ -53,13 +54,18 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Failed to load data from localStorage", error);
+    } finally {
+      historyLoaded.current = true;
     }
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || result === null) return;
     try {
-      window.localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(result));
+      window.localStorage.setItem(
+        STORAGE_KEY_GENERATED,
+        JSON.stringify(result),
+      );
     } catch (error) {
       console.error("Failed to save results to localStorage", error);
     }
@@ -73,26 +79,14 @@ export default function Home() {
     }
   };
 
-  const handleSearch = (searchData: {
-    description: string;
-    industry: string;
-    count: number;
-    length: number;
-    tone: string;
-  }) => {
-    if (result && Array.isArray(result)) {
-      const newEntry = {
-        id: Date.now().toString(),
-        timestamp: Date.now(),
-        ...searchData,
-        results: result,
-      };
-      setSearchHistory((prev) => [newEntry, ...prev.slice(0, 9)]); // Keep only last 10
-    }
-  };
-
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (
+      typeof window === "undefined" ||
+      !historyLoaded.current ||
+      searchHistory.length === 0
+    )
+      return;
+
     try {
       window.localStorage.setItem(
         STORAGE_KEY_HISTORY,
@@ -102,6 +96,35 @@ export default function Home() {
       console.error("Failed to save history to localStorage", error);
     }
   }, [searchHistory]);
+
+  const handleSearch = (searchData: {
+    description: string;
+    industry: string;
+    count: number;
+    length: number;
+    tone: string;
+    results: string[];
+  }) => {
+    const newEntry = {
+      id: Date.now().toString(),
+      timestamp: Date.now(),
+      ...searchData,
+    };
+    setSearchHistory((prev) => {
+      const nextHistory = [newEntry, ...prev.slice(0, 9)];
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(
+            STORAGE_KEY_HISTORY,
+            JSON.stringify(nextHistory),
+          );
+        } catch (error) {
+          console.error("Failed to save history to localStorage", error);
+        }
+      }
+      return nextHistory;
+    });
+  };
 
   const handleToggleFavorite = (name: string) => {
     setSavedNames((current) => {

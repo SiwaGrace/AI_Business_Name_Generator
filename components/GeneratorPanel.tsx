@@ -34,6 +34,7 @@ type Props = {
     count: number;
     length: number;
     tone: string;
+    results: string[];
   }) => void;
 };
 
@@ -80,18 +81,19 @@ export default function GeneratorPanel({
       const response = await handleGenerate(null, formData);
       if (!response) throw new Error("No response");
 
-      // Call onSearch with form data
-      if (onSearch) {
+      onResult(response);
+
+      // Call onSearch with form data and actual generated results
+      if (onSearch && Array.isArray(response)) {
         onSearch({
           description: formData.get("text") as string,
           industry: formData.get("industry") as string,
           count: parsedCount || count,
           length: parsedLength || length,
           tone: formData.get("tone") as string,
+          results: response,
         });
       }
-
-      onResult(response);
     } catch (error) {
       console.error(error);
       onResult(
