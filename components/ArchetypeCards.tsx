@@ -19,82 +19,106 @@ export default function ArchetypeCards({
 
   const visible = data.slice(0, showing);
 
-  if (!result || typeof result === "string") return null;
+  const isError = typeof result === "string";
+  const hasData = data.length > 0;
 
   return (
     <section className="max-w-4xl mx-auto w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-heading text-xl font-black tracking-tight text-heading">
-          Generated Archetypes
-        </h2>
-        <span className="rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted">
-          Showing {showing} of {data.length}
-        </span>
+        {/* <h2 className="font-heading text-xl font-black tracking-tight text-heading"> */}
+        <div className="w-full">
+          {isError ? (
+            "Error"
+          ) : hasData ? (
+            <h2 className="font-heading text-xl font-black tracking-tight text-heading">
+              Generated Archetypes
+            </h2>
+          ) : (
+            <h2 className="font-heading text-lg  text-center tracking-tight text-heading">
+              No names generated yet
+            </h2>
+          )}
+        </div>
+        {/* </h2> */}
+        {hasData && (
+          <span className="rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted">
+            Showing {showing} of {data.length}
+          </span>
+        )}
       </div>
 
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {visible.map((item) => (
-          <div
-            key={item}
-            className="group cursor-pointer rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:border-accent/25 hover:shadow-xl hover:shadow-primary-glow/30"
-          >
-            {/* Top row */}
-            <div className="flex items-center justify-between mb-4">
-              <button
-                onClick={() => onFavoriteToggle(item)}
-                className={`transition-colors ${
-                  starred[item] ? "text-accent" : "text-muted hover:text-accent"
-                }`}
+      {/* Content */}
+      {isError ? (
+        <p className="text-muted">{result}</p>
+      ) : hasData ? (
+        <>
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {visible.map((item) => (
+              <div
+                key={item}
+                className="group cursor-pointer rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:border-accent/25 hover:shadow-xl hover:shadow-primary-glow/30"
               >
-                <Star
-                  size={14}
-                  fill={starred[item] ? "currentColor" : "none"}
-                />
+                {/* Top row */}
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    onClick={() => onFavoriteToggle(item)}
+                    className={`transition-colors ${
+                      starred[item]
+                        ? "text-accent"
+                        : "text-muted hover:text-accent"
+                    }`}
+                  >
+                    <Star
+                      size={14}
+                      fill={starred[item] ? "currentColor" : "none"}
+                    />
+                  </button>
+                </div>
+
+                {/* Name */}
+                <h3 className="mb-3 font-heading text-2xl font-black text-heading transition-colors group-hover:text-accent">
+                  {item}
+                </h3>
+
+                {/* Domain statuses */}
+                <div className="flex justify-between items-center mt-4">
+                  <div>
+                    <a
+                      href={`https://www.namecheap.com/domains/registration/results/?domain=${item}`}
+                      target="_blank"
+                      className="text-xs text-primary hover:underline"
+                    >
+                      Check Availability
+                    </a>
+                  </div>
+
+                  {/* Arrow */}
+                  <div>
+                    <ArrowRight
+                      size={14}
+                      className="text-muted transition-all group-hover:translate-x-0.5 group-hover:text-accent"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Show more */}
+          {showing < data.length && (
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={() => setShowing((v) => Math.min(v + 3, data.length))}
+                className="rounded-xl border border-border px-6 py-2.5 text-sm text-muted transition-all hover:border-primary/35 hover:bg-surface hover:text-heading"
+              >
+                Show More
               </button>
             </div>
-
-            {/* Name */}
-            <h3 className="mb-3 font-heading text-2xl font-black text-heading transition-colors group-hover:text-accent">
-              {item}
-            </h3>
-
-            {/* Domain statuses */}
-            <div className="flex justify-between items-center mt-4">
-              <div>
-                <a
-                  href={`https://www.namecheap.com/domains/registration/results/?domain=${item}`}
-                  target="_blank"
-                  className="text-xs text-primary hover:underline"
-                >
-                  Check Availability
-                </a>
-              </div>
-
-              {/* Arrow */}
-              <div>
-                <ArrowRight
-                  size={14}
-                  className="text-muted transition-all group-hover:translate-x-0.5 group-hover:text-accent"
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Show more */}
-      {showing < data.length && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={() => setShowing((v) => Math.min(v + 3, data.length))}
-            className="rounded-xl border border-border px-6 py-2.5 text-sm text-muted transition-all hover:border-primary/35 hover:bg-surface hover:text-heading"
-          >
-            Show More
-          </button>
-        </div>
-      )}
+          )}
+        </>
+      ) : null}
     </section>
   );
 }

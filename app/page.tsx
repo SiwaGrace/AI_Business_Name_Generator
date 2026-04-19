@@ -9,7 +9,9 @@ import GeneratorPanel from "@/components/GeneratorPanel";
 import ArchetypeCards from "@/components/ArchetypeCards";
 import FeatureGrid from "@/components/FeatureGrid";
 
-const STORAGE_KEY = "savedNames";
+const STORAGE_KEY_SAVED = "savedNames";
+const STORAGE_KEY_RESULTS = "generatedResults";
+const STORAGE_KEY_HISTORY = "searchHistory";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,26 +23,85 @@ export default function Home() {
       tag: string;
     }[]
   >([]);
+  const [searchHistory, setSearchHistory] = useState<
+    {
+      id: string;
+      timestamp: number;
+      description: string;
+      industry: string;
+      count: number;
+      length: number;
+      tone: string;
+      results: string[];
+    }[]
+  >([]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setSavedNames(JSON.parse(stored));
+      const storedSaved = window.localStorage.getItem(STORAGE_KEY_SAVED);
+      if (storedSaved) {
+        setSavedNames(JSON.parse(storedSaved));
+      }
+      const storedResults = window.localStorage.getItem(STORAGE_KEY_RESULTS);
+      if (storedResults) {
+        setResult(JSON.parse(storedResults));
+      }
+      const storedHistory = window.localStorage.getItem(STORAGE_KEY_HISTORY);
+      if (storedHistory) {
+        setSearchHistory(JSON.parse(storedHistory));
       }
     } catch (error) {
-      console.error("Failed to load saved names from localStorage", error);
+      console.error("Failed to load data from localStorage", error);
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(result));
+    } catch (error) {
+      console.error("Failed to save results to localStorage", error);
+    }
+  }, [result]);
+
   const saveToStorage = (items: typeof savedNames) => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      window.localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(items));
     } catch (error) {
       console.error("Failed to save saved names to localStorage", error);
     }
   };
+
+  const handleSearch = (searchData: {
+    description: string;
+    industry: string;
+    count: number;
+    length: number;
+    tone: string;
+  }) => {
+    if (result && Array.isArray(result)) {
+      const newEntry = {
+        id: Date.now().toString(),
+        timestamp: Date.now(),
+        ...searchData,
+        results: result,
+      };
+      setSearchHistory((prev) => [newEntry, ...prev.slice(0, 9)]); // Keep only last 10
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY_HISTORY,
+        JSON.stringify(searchHistory),
+      );
+    } catch (error) {
+      console.error("Failed to save history to localStorage", error);
+    }
+  }, [searchHistory]);
 
   const handleToggleFavorite = (name: string) => {
     setSavedNames((current) => {
@@ -82,6 +143,7 @@ export default function Home() {
               onResult={setResult}
               onPending={setIsPending}
               isPending={isPending}
+              onSearch={handleSearch}
             />
             <ArchetypeCards
               result={result}

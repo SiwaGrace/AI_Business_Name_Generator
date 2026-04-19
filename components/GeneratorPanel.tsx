@@ -28,12 +28,20 @@ type Props = {
   onResult: (result: string[] | string) => void;
   onPending: (pending: boolean) => void;
   isPending: boolean;
+  onSearch?: (searchData: {
+    description: string;
+    industry: string;
+    count: number;
+    length: number;
+    tone: string;
+  }) => void;
 };
 
 export default function GeneratorPanel({
   onResult,
   onPending,
   isPending,
+  onSearch,
 }: Props) {
   const [description, setDescription] = useState("");
   const [industry, setIndustry] = useState("Fintech & Web3");
@@ -71,6 +79,18 @@ export default function GeneratorPanel({
 
       const response = await handleGenerate(null, formData);
       if (!response) throw new Error("No response");
+
+      // Call onSearch with form data
+      if (onSearch) {
+        onSearch({
+          description: formData.get("text") as string,
+          industry: formData.get("industry") as string,
+          count: parsedCount || count,
+          length: parsedLength || length,
+          tone: formData.get("tone") as string,
+        });
+      }
+
       onResult(response);
     } catch (error) {
       console.error(error);

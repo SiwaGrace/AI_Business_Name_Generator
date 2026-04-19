@@ -2,17 +2,12 @@
 
 import { X, Zap, Star, Clock } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const navItems = [
-  { icon: Zap, label: "Generator", href: "/", active: true },
-  { icon: Star, label: "Starred Names", href: "/starred", active: false },
-  { icon: Clock, label: "Recent History", href: "/history", active: false },
-];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
@@ -42,11 +37,25 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   );
 }
 
-function SidebarContent({
-  onClose,
-}: {
-  onClose: () => void;
-}) {
+function SidebarContent({ onClose }: { onClose: () => void }) {
+  const pathname = usePathname();
+
+  const navItems = [
+    { icon: Zap, label: "Generator", href: "/", active: pathname === "/" },
+    {
+      icon: Star,
+      label: "Starred Names",
+      href: "/starred",
+      active: pathname === "/starred",
+    },
+    {
+      icon: Clock,
+      label: "Recent History",
+      href: "/history",
+      active: pathname === "/history",
+    },
+  ];
+
   return (
     <div className="flex flex-col h-full">
       {/* Logo */}
